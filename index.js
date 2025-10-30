@@ -5,14 +5,14 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import serverless from "serverless-http";
-import connectDB from "./src/config/db.js";
+// import connectDB from "./src/config/db.js";
 // Import routes
 import adminRoutes from "./src/routes/adminRoutes.js";
 import categoryRoutes from "./src/routes/categoryRoutes.js";
 import productRoutes from "./src/routes/productRoutes.js";
 
 dotenv.config();
-connectDB();
+// connectDB();
 const app = express();
 
 // ===== MIDDLEWARE =====
