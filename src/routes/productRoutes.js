@@ -1,17 +1,23 @@
 import express from "express";
+import multer from "multer";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 import {
-  createProduct,
+  addProduct,
   getProducts,
   updateProduct,
   deleteProduct,
 } from "../controllers/productController.js";
-import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 
 const router = express.Router();
 
+// ✅ Multer config for file upload
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
+
+// Routes
+router.post("/", verifyAdmin, upload.single("image"), addProduct);
 router.get("/", getProducts);
-router.post("/", verifyAdmin, createProduct);
-router.put("/:id", verifyAdmin, updateProduct);
+router.put("/:id", verifyAdmin, upload.single("image"), updateProduct);
 router.delete("/:id", verifyAdmin, deleteProduct);
 
 export default router;
