@@ -1,15 +1,10 @@
+// src/routes/adminRoutes.js
 import express from "express";
-import {
-  registerAdmin,
-  loginAdmin,
-  getStats,
-} from "../controllers/adminController.js";
-import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import { login, logout } from "../controllers/adminController.js";
 
 const router = express.Router();
 
-router.post("/register", registerAdmin);
-router.post("/login", loginAdmin);
-router.get("/stats", verifyAdmin, getStats);
+router.post("/login", login);
+router.post("/logout", logout);
 
 export default router;

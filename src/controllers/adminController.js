@@ -1,58 +1,65 @@
+// src/controllers/adminController.js
 import Admin from "../models/Admin.js";
-import User from "../models/User.js";
-import Category from "../models/Category.js";
-import Product from "../models/Product.js";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-// 🟢 Admin Register (run once to create admin)
-export const registerAdmin = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const exists = await Admin.findOne({ email });
-    if (exists)
-      return res.status(400).json({ message: "Admin already exists" });
-
-    const admin = await Admin.create({ name, email, password });
-    res.status(201).json({ message: "Admin registered successfully", admin });
-  } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
-  }
-};
-
-// 🔐 Admin Login
-export const loginAdmin = async (req, res) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const admin = await Admin.findOne({ email });
-    if (!admin) return res.status(404).json({ message: "Admin not found" });
 
-    const match = await admin.comparePassword(password);
-    if (!match) return res.status(401).json({ message: "Invalid credentials" });
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ success: false, message: "Email and password required" });
+
+    const admin = await Admin.findOne({ email });
+    if (!admin)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+
+    const match = await bcrypt.compare(password, admin.password);
+    if (!match)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
+
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not set in .env");
+      return res
+        .status(500)
+        .json({ success: false, message: "Server misconfiguration" });
+    }
 
     const token = jwt.sign(
-      { id: admin._id, role: "admin", email: admin.email },
+      { id: admin._id, role: "admin" },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      {
+        expiresIn: "7d",
+      }
     );
 
-    res.json({ message: "Login successful", token, admin });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false, // set true in production (HTTPS)
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({
+      success: true,
+      message: "Login successful",
+      admin: { id: admin._id, name: admin.name || "", email: admin.email },
+    });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    console.error("Login error:", err);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error", error: err.message });
   }
 };
 
-// 📊 Admin Dashboard Stats
-export const getStats = async (req, res) => {
-  try {
-    const totalUsers = await User.countDocuments();
-    const totalCategories = await Category.countDocuments();
-    const totalProducts = await Product.countDocuments();
-
-    res.json({ totalUsers, totalCategories, totalProducts });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Failed to fetch stats", error: err.message });
-  }
+export const logout = (req, res) => {
+  res.clearCookie("token", { path: "/" });
+  return res.json({ success: true, message: "Logged out" });
 };

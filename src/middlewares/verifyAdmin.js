@@ -1,17 +1,26 @@
+// src/middlewares/verifyAdmin.js
 import jwt from "jsonwebtoken";
 
 export const verifyAdmin = (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "No token provided" });
+    const token = req.cookies?.token;
+    if (!token)
+      return res
+        .status(401)
+        .json({ success: false, message: "No token provided" });
+
+    if (!process.env.JWT_SECRET)
+      return res
+        .status(500)
+        .json({ success: false, message: "Server misconfig" });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    if (decoded.role !== "admin")
-      return res.status(403).json({ message: "Access denied" });
-
-    req.admin = decoded;
+    req.adminId = decoded.id;
     next();
   } catch (err) {
-    res.status(401).json({ message: "Invalid or expired token" });
+    console.error("verifyAdmin error:", err);
+    return res
+      .status(401)
+      .json({ success: false, message: "Invalid or expired token" });
   }
 };
