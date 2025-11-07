@@ -20,20 +20,25 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Allow both frontend local + vercel domain
+const allowedOrigins = [
+  "https://my-store-admin-five.vercel.app/",
+  "http://localhost:5173",
+];
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", // local frontend
-      "https://my-store-frontend.vercel.app", // change later to actual frontend domain
-    ],
+    origin: allowedOrigins,
     credentials: true,
   })
 );
 
 // ===== DATABASE CONNECTION =====
-const MONGO_URI = process.env.MONGO_URI;
+// const MONGO_URI = process.env.MONGO_URI;
+// mongoose
+//   .connect(MONGO_URI)
+//   .then(() => console.log("✅ MongoDB connected successfully"))
+//   .catch((err) => console.error("❌ MongoDB connection error:", err));
 mongoose
-  .connect(MONGO_URI)
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
