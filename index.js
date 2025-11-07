@@ -73,10 +73,11 @@ app.get("/", (_req, res) => {
       <style>
         body {
           font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          background: linear-gradient(135deg, #007BFF, #00C6FF);
+          background: linear-gradient(135deg, #023f53ff, #000000ff);
           color: #fff;
           margin: 0;
           padding: 0;
+          margin-top:25px;
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -85,8 +86,9 @@ app.get("/", (_req, res) => {
           text-align: center;
         }
         .container {
-          background: rgba(255, 255, 255, 0.15);
+          background: rgba(12, 94, 152, 1);
           padding: 30px 40px;
+          margin-top:15px;
           border-radius: 16px;
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
           max-width: 500px;
@@ -103,9 +105,9 @@ app.get("/", (_req, res) => {
           line-height: 1.6;
         }
         a {
-          color: #ffe082;
+          color: #ffffffff;
           text-decoration: none;
-          font-weight: 600;
+          font-weight: 600;text-decoration: underline;
         }
         a:hover {
           text-decoration: underline;
