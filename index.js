@@ -32,13 +32,9 @@ app.use(
 );
 
 // ===== DATABASE CONNECTION =====
-// const MONGO_URI = process.env.MONGO_URI;
-// mongoose
-//   .connect(MONGO_URI)
-//   .then(() => console.log("✅ MongoDB connected successfully"))
-//   .catch((err) => console.error("❌ MongoDB connection error:", err));
+const MONGO_URI = process.env.MONGO_URI;
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
