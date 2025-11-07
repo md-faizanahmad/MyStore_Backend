@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 // Allow both frontend local + vercel domain
 const allowedOrigins = [
-  "https://my-store-admin-five.vercel.app/",
+  "https://my-store-admin-five.vercel.app",
   "http://localhost:5173",
 ];
 app.use(
