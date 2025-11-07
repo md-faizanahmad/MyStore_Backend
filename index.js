@@ -183,9 +183,7 @@ app.get("/", (_req, res) => {
         </footer>
       </div>
 
-      <script>
-        alert("Welcome to MyStore API — powered by free cloud stack 🌐");
-      </script>
+      
     </body>
     </html>
   `);
