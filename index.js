@@ -42,8 +42,23 @@ app.use("/mystoreapi/admin", adminRoutes);
 app.use("/mystoreapi/categories", categoryRoutes);
 app.use("/mystoreapi/products", productRoutes);
 
+// app.get("/", (_req, res) => {
+//   res.send("MyStore API is running 🚀");
+// });
+
 app.get("/", (_req, res) => {
-  res.send("MyStore API is running 🚀");
+  res.send(`
+    <h3 >MyStore API is running 🚀</h3>
+    <p>Visit the live site here: 
+      <a href="https://my-store-admin-five.vercel.app/" target="_blank">
+        MyStore Admin
+      </a>
+      <ul>
+      <li>UserId: admin@mystore.com</li>
+      <li>password: admin123</li>
+      </ul>
+    </p>
+  `);
 });
 
 // --- server (local) vs serverless (vercel) ---
