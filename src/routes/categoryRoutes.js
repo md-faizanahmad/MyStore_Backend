@@ -1,17 +1,17 @@
 import express from "express";
+import { verifyAdminCookie } from "../middlewares/verifyAdmin.js";
 import {
   createCategory,
   getCategories,
   updateCategory,
   deleteCategory,
 } from "../controllers/categoryController.js";
-import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 
 const router = express.Router();
 
 router.get("/", getCategories);
-router.post("/", verifyAdmin, createCategory);
-router.put("/:id", verifyAdmin, updateCategory);
-router.delete("/:id", verifyAdmin, deleteCategory);
+router.post("/", verifyAdminCookie, createCategory);
+router.put("/:id", verifyAdminCookie, updateCategory);
+router.delete("/:id", verifyAdminCookie, deleteCategory);
 
 export default router;
