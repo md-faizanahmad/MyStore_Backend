@@ -26,7 +26,7 @@ app.use(
     credentials: true,
   })
 );
-app.options("*", cors());
+
 // --- db connect ---
 const MONGO_URI = process.env.MONGO_URI;
 if (!MONGO_URI) {
