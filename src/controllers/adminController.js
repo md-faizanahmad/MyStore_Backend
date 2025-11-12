@@ -26,12 +26,15 @@ export async function login(req, res) {
       expiresIn: "7d",
     });
 
+    // // Determine environment
+    const isProd = process.env.NODE_ENV === "production";
+
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: isProd, // must be true on Vercel (HTTPS)
+      sameSite: isProd ? "none" : "lax", // "none" required for cross-site
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: "/",
+      path: "/", // must be root
     });
 
     return res.json({

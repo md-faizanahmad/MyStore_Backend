@@ -17,6 +17,9 @@ const app = express();
 // --- core middleware ---
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+
+app.set("trust proxy", 1); // Vercel proxy - required for secure cookies
+
 app.use(
   cors({
     origin: [
